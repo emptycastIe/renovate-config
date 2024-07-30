@@ -1,0 +1,19 @@
+name: renovate
+on:
+  schedule:
+    - cron: "@daily"
+  push:
+    branches:
+      - master
+jobs:
+  renovate:
+    runs-on: ubuntu-latest
+    container: ghcr.io/renovatebot/renovate:38.12.0 # ghcr.io/renovatebot/renovate docker tag
+    steps:
+      - uses: actions/checkout@v4
+      - run: renovate
+        env:
+          RENOVATE_CONFIG_FILE: "/workspace/<organization>/<repo_name>/config.js"
+          LOG_LEVEL: "debug"
+          RENOVATE_CONFIG_MIGRATION: "true" # Ensure all repositories receive config migration PRs
+          RENOVATE_TOKEN: ${{ secrets.RENOVATE_TOKEN }}
